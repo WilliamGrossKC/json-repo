@@ -30,268 +30,151 @@
         "description": "Loading of \"https://console.delltechnologies.com/\"",
         "url": "https://console.delltechnologies.com/"
     }, {
-        "type": "click",
-        "wait": {
-            "waitFor": "network"
-        },
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "#EmailAddress"
-            }, {
-                "type": "css",
-                "value": "input[type=\"text\"][name=\"EmailAddress\"]"
-            }, {
-                "type": "css",
-                "value": ".bottom-offset-mini:eq(0)"
-            }, {
-                "type": "css",
-                "value": "#frmSignIn div:nth-child(7) div:nth-child(5) div div:nth-child(2) input"
-            }, {
-                "type": "css",
-                "value": "#EmailAddress"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"Email*\""
-    }, {
-        "type": "keystrokes",
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "#EmailAddress"
-            }, {
-                "type": "css",
-                "value": "input[type=\"text\"][name=\"EmailAddress\"]"
-            }, {
-                "type": "css",
-                "value": ".bottom-offset-mini:eq(0)"
-            }, {
-                "type": "css",
-                "value": "#frmSignIn div:nth-child(7) div:nth-child(5) div div:nth-child(2) input"
-            }, {
-                "type": "css",
-                "value": "#EmailAddress"
-            }]
-        },
-        "masked": false,
-        "simulateBlurEvent": true,
-        "description": "keystrokes on \"Email*\"",
-        "textValue": "cooltofino@gmail.com"
-    }, {
-        "type": "click",
-        "wait": {
-            "waitFor": "network"
-        },
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "#Password"
-            }, {
-                "type": "css",
-                "value": "input[type=\"password\"][name=\"Password\"]"
-            }, {
-                "type": "css",
-                "value": ".bottom-offset-mini:eq(1)"
-            }, {
-                "type": "css",
-                "value": "#frmSignIn div:nth-child(7) div:nth-child(6) div div:nth-child(2) input"
-            }, {
-                "type": "css",
-                "value": "#Password"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"Password*\""
-    }, {
-        "type": "keystrokes",
+        "type": "javascript",
         "wait": {
             "waitFor": "next_event"
         },
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "#Password"
-            }, {
-                "type": "css",
-                "value": "input[type=\"password\"][name=\"Password\"]"
-            }, {
-                "type": "css",
-                "value": ".bottom-offset-mini:eq(1)"
-            }, {
-                "type": "css",
-                "value": "#frmSignIn div:nth-child(7) div:nth-child(6) div div:nth-child(2) input"
-            }, {
-                "type": "css",
-                "value": "#Password"
-            }]
+        "description": "Login",
+        "javaScript": "email = \"dynaprod.end.admin@proton.me\";\r\npassword = \"Password@1\";\r\n\r\nconst akamaiAlertElement = document.querySelector(\"body > h1\");\r\nconst isAkamaiBlocking = akamaiAlertElement && akamaiAlertElement.innerText.includes(\"Access Denied\");\r\nif (isAkamaiBlocking) {\r\n    // check if Akamai is blocking\r\n    api.info(\"Akamai is blocking  - skipping current execution without failing\");\r\n    api.skipNextSyntheticEvents(50);\r\n} else if (document.querySelector(\"#ImageText\")) {\r\n    // check if captcha is triggered\r\n    api.info(\"Captcha has been triggered - skipping current execution without failing\");\r\n    api.skipNextSyntheticEvents(50);\r\n} else {\r\n    // otherwise log in\r\n    document.querySelector(\"#EmailAddress\").value = email;\r\n    document.querySelector(\"#Password\").value = password;\r\n    document.querySelector(\"#sign-in-button\").click();\r\n    api.finish();\r\n}"
+    }, {
+        "type": "javascript",
+        "wait": {
+            "waitFor": "next_event"
         },
-        "masked": true,
-        "simulateBlurEvent": true,
-        "description": "keystrokes on \"Password*\"",
-        "textValue": "U2FsdGVkX1+lHgE4Yge4qLemcKaN2imewXPVX1fwgaw="
+        "description": "Select Organization (Geo)",
+        "javaScript": "const GEO = \"APEXTESTEUUS04_3\";\r\n\r\ndocument.querySelector(\"button[data-testid=organization-dropdown-trigger]\").click();\r\ndocument.querySelector(`div[data-testid=${GEO}]`).click();"
     }, {
         "type": "click",
         "wait": {
-            "waitFor": "network"
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-cy=\"configure-hybrid15g\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
         },
         "target": {
             "locators": [{
                 "type": "css",
-                "value": "a:contains(\"Catalog\")"
-            }, {
-                "type": "css",
-                "value": "div:contains(\"Active Subscriptions\"):eq(1)"
-            }, {
-                "type": "css",
-                "value": "#navLeft-root nav div a:nth-child(2)"
-            }, {
-                "type": "css",
-                "value": "#navLeft-root nav.dds__navLeft div.dds__accordion a:eq(1)"
+                "value": "[data-testid=\"catalog\"]"
             }]
         },
         "button": 0,
-        "description": "click on \"Catalog\""
+        "description": "Catalog"
     }, {
         "type": "click",
         "wait": {
-            "waitFor": "network"
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[id=\"order-name\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
         },
         "target": {
             "locators": [{
                 "type": "css",
-                "value": "button[type=\"button\"]:eq(7)"
-            }, {
-                "type": "css",
-                "value": "a:contains(\"Configure\"):eq(1)"
-            }, {
-                "type": "css",
-                "value": "button:contains(\"Configure\"):eq(1)"
-            }, {
-                "type": "css",
-                "value": ".dds__btn-primary:eq(7)"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(3) div:nth-child(2) div div:nth-child(2) div:nth-child(2) a:nth-child(2) button"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div div.dds__mt-4 div.dds__row div.dds__p-3 div.dds__d-flex a button.dds__btn-primary:eq(1)"
+                "value": "[data-cy=\"configure-hybrid15g\"]"
             }]
         },
         "button": 0,
-        "description": "click on \"Configure\""
-    }, {
-        "type": "click",
-        "wait": {
-            "waitFor": "network"
-        },
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "#order-name"
-            }, {
-                "type": "css",
-                "value": "input[name=\"7f66920c-bf3f-4f39-9e77-03940ac1c4ca\"]"
-            }, {
-                "type": "css",
-                "value": ".dds__form-control:eq(0)"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div div:nth-child(2) div div div input"
-            }, {
-                "type": "css",
-                "value": "#order-name"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"Order name\""
+        "description": "Configure"
     }, {
         "type": "keystrokes",
         "target": {
             "locators": [{
                 "type": "css",
-                "value": "#order-name"
-            }, {
-                "type": "css",
-                "value": "input[name=\"7f66920c-bf3f-4f39-9e77-03940ac1c4ca\"]"
-            }, {
-                "type": "css",
-                "value": ".dds__form-control:eq(0)"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div div:nth-child(2) div div div input"
-            }, {
-                "type": "css",
-                "value": "#order-name"
+                "value": "[id=\"order-name\"]"
             }]
         },
         "masked": false,
         "simulateBlurEvent": true,
-        "description": "keystrokes on \"Order name\"",
-        "textValue": "AHC-End-Customer"
+        "description": "Type \"Order name\"",
+        "textValue": "Dynatrace-AHC-EndCust-Test"
     }, {
         "type": "click",
         "wait": {
-            "waitFor": "network"
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-testid=\"management-domain-question\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
         },
         "target": {
             "locators": [{
                 "type": "css",
-                "value": "button[type=\"button\"]:eq(6)"
-            }, {
-                "type": "css",
-                "value": "button:contains(\"Continue\"):eq(0)"
-            }, {
-                "type": "css",
-                "value": ".dds__font-weight-bold:eq(7)"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div div:nth-child(8) div:nth-child(2) button"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div.dds__px-0 div.dds__row div.dds__col-xxl-12 section.dds__dell-container div.dds__dell-container-body div.dds__d-flex div.dds__text-right button.dds__font-weight-bold"
+                "value": "[data-testid=\"next\"]"
             }]
         },
         "button": 0,
-        "description": "click on \"Continue\""
-    }, {
-        "type": "click",
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "span:contains(\"No\"):eq(1)"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div fieldset:nth-child(3) div div div:nth-child(2) label span:nth-child(2)"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div.dds__px-0 div.dds__row div.dds__col-xxl-12 section.dds__dell-container div.dds__dell-container-body fieldset div.dds__row div.dds__col-xxl-3 div.dds__form-check label.dds__form-check-label span:eq(1)"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"No\""
+        "description": "Continue"
     }, {
         "type": "click",
         "target": {
             "locators": [{
                 "type": "css",
                 "value": "#dedicatedDomainNo-no"
-            }, {
-                "type": "css",
-                "value": "input[type=\"radio\"][name=\"dedicatedDomainNo\"]"
-            }, {
-                "type": "css",
-                "value": ".dds__form-check-input:eq(1)"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div fieldset:nth-child(3) div div div:nth-child(2) label input"
-            }, {
-                "type": "css",
-                "value": "#dedicatedDomainNo-no"
             }]
         },
         "button": 0,
-        "description": "click on \"No\""
+        "description": "Management Zone"
+    }, {
+        "type": "click",
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[id=\"vmwareEditionStandard-vcf standard\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Cloud Foundation"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-testid=\"service-type-COMPUTE_OPTIMIZED\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"next\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Continue"
     }, {
         "type": "click",
         "wait": {
@@ -300,55 +183,119 @@
         "target": {
             "locators": [{
                 "type": "css",
-                "value": "div:contains(\"*Deployment time is measured between order acceptance and activation. The 28-day deployment applies to single rack deployments of select APEX Cloud services pre-configured solutions and does not include customizations to the standard configuration. Deployment is subject to credit approval, acceptance of APEX terms by required parties, deployment survey, availability of resources at the deployment facility, and a completed configuration workbook before order placement. Product availability, inter\"):eq(7)"
-            }, {
-                "type": "css",
-                "value": ".dds__dell-container-body"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div.dds__px-0 div.dds__row div.dds__col-xxl-12 section.dds__dell-container div.dds__dell-container-body"
+                "value": "[data-testid=\"service-type-COMPUTE_OPTIMIZED\"]"
             }]
         },
         "button": 0,
-        "description": "click"
+        "description": "Click \"Computer Optimized\""
     }, {
         "type": "click",
         "target": {
             "locators": [{
                 "type": "css",
-                "value": "span:contains(\"VCF Standard\")"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div fieldset:nth-child(11) div div div label span:nth-child(2)"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div.dds__px-0 div.dds__row div.dds__col-xxl-12 section.dds__dell-container div.dds__dell-container-body fieldset div.dds__row div.dds__col-xxl-3 div.dds__form-check label.dds__form-check-label span:eq(2)"
+                "value": "#storageType-vsan"
             }]
         },
         "button": 0,
-        "description": "click on \"VCF Standard\""
+        "description": "Click Storage Type \"vSAN\""
+    }, {
+        "type": "click",
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "#storageCapacity-16"
+            }]
+        },
+        "button": 0,
+        "description": "Click Storage Capacity \"16TB\""
     }, {
         "type": "click",
         "wait": {
-            "waitFor": "network"
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-testid=\"vmware-ela-title\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
         },
         "target": {
             "locators": [{
                 "type": "css",
-                "value": "input[type=\"radio\"][name=\"vmwareEditionStandard\"]"
-            }, {
-                "type": "css",
-                "value": ".dds__form-check-input:eq(2)"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div fieldset:nth-child(11) div div div label input"
+                "value": "[data-testid=\"next\"]"
             }]
         },
         "button": 0,
-        "description": "click on \"VCF Standard\""
+        "description": "Continue to VMWare ELA "
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-testid=\"select-site-dropdown\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"next\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Continue to Site Address"
+    }, {
+        "type": "selectOption",
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"select-site-dropdown\"]"
+            }]
+        },
+        "description": "Select \"Site Address\"",
+        "selections": [{
+            "index": 1,
+            "value": "672866516423367535_530026310972_11"
+        }]
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-testid=\"site-survey-responses-select\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"next\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Continue to Site Survey"
     }, {
         "type": "click",
         "wait": {
@@ -357,452 +304,11 @@
         "target": {
             "locators": [{
                 "type": "css",
-                "value": "button[type=\"button\"]:eq(7)"
-            }, {
-                "type": "css",
-                "value": "button:contains(\"Continue\"):eq(0)"
-            }, {
-                "type": "css",
-                "value": ".dds__font-weight-bold:eq(14)"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div div:nth-child(14) div:nth-child(2) button:nth-child(2)"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div.dds__px-0 div.dds__row div.dds__col-xxl-12 section.dds__dell-container div.dds__dell-container-body div.dds__d-flex div.dds__text-right button.dds__font-weight-bold:eq(1)"
+                "value": "[data-testid=\"site-survey-responses-select\"]"
             }]
         },
         "button": 0,
-        "description": "click on \"Continue\""
-    }, {
-        "type": "click",
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "div:contains(\"16 GB memory-core ratio\"):eq(13)"
-            }, {
-                "type": "css",
-                "value": ".dds__font-size-12:eq(2)"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div fieldset:nth-child(8) div div:nth-child(3) label:nth-child(2) div div div div:nth-child(3)"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div.dds__px-0 div.dds__row div.dds__col-xxl-12 section.dds__dell-container div.dds__dell-container-body fieldset.instance-type-tier-cards_2HZ1h div.dds__radio-btn-wrapper-stroked div.dds__card-stroked label.dds__card-label-stroked div.dds__card-label-container div.dds__h-100 div.dds__text-center div.dds__font-size-12:eq(2)"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"16 GB memory-core ratio\""
-    }, {
-        "type": "click",
-        "wait": {
-            "waitFor": "network"
-        },
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "#MEMORY_OPTIMIZED"
-            }, {
-                "type": "css",
-                "value": "input[type=\"radio\"][name=\"instanceType\"]:eq(2)"
-            }, {
-                "type": "css",
-                "value": ".dds__btn-input:eq(2)"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div fieldset:nth-child(8) div div:nth-child(3) input"
-            }, {
-                "type": "css",
-                "value": "#MEMORY_OPTIMIZED"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"Memory optimized16 GB memory-core ratioShow details\""
-    }, {
-        "type": "click",
-        "wait": {
-            "waitFor": "network"
-        },
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "span:contains(\"16 TB\")"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div fieldset:nth-child(36) div div div label span:nth-child(2)"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div.dds__px-0 div.dds__row div.dds__col-xxl-12 section.dds__dell-container div.dds__dell-container-body fieldset div.dds__row div.dds__col-xxl-3 div.dds__form-check label.dds__form-check-label span:eq(2)"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"16 TB\""
-    }, {
-        "type": "click",
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "#storageCapacity-16"
-            }, {
-                "type": "css",
-                "value": "input[type=\"radio\"][name=\"storageCapacity\"]:eq(0)"
-            }, {
-                "type": "css",
-                "value": ".dds__form-check-input:eq(2)"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div fieldset:nth-child(36) div div div label input"
-            }, {
-                "type": "css",
-                "value": "#storageCapacity-16"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"16 TB\""
-    }, {
-        "type": "click",
-        "wait": {
-            "waitFor": "network"
-        },
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "button[type=\"button\"]:eq(9)"
-            }, {
-                "type": "css",
-                "value": "button:contains(\"Continue\"):eq(0)"
-            }, {
-                "type": "css",
-                "value": ".dds__font-weight-bold:eq(17)"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div div:nth-child(39) div:nth-child(2) button:nth-child(3)"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div.dds__px-0 div.dds__row div.dds__col-xxl-12 section.dds__dell-container div.dds__dell-container-body div.dds__d-flex div.dds__text-right button.dds__font-weight-bold:eq(2)"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"Continue\""
-    }, {
-        "type": "click",
-        "wait": {
-            "waitFor": "network"
-        },
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "div:contains(\"Committed amount of $12,092.84 per month\"):eq(13)"
-            }, {
-                "type": "css",
-                "value": ".dds__text-center:eq(0)"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div fieldset:nth-child(3) div:nth-child(5) fieldset div div label:nth-child(2) div div div"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div.dds__px-0 div.dds__row div.dds__col-xxl-12 section.dds__dell-container div.dds__dell-container-body fieldset.dds__mt-3 div.dds__mt-3 fieldset div.dds__radio-btn-wrapper-stroked div.dds__card-stroked label.dds__card-label-stroked div.dds__card-label-container div.dds__h-100 div.dds__text-center:eq(0)"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"1 yearCommitted amount of $12,092.84 per month\""
-    }, {
-        "type": "click",
-        "wait": {
-            "waitFor": "network"
-        },
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "#12\\,NONELA"
-            }, {
-                "type": "css",
-                "value": "input[type=\"radio\"][name=\"TERM_DURATION\"]:eq(0)"
-            }, {
-                "type": "css",
-                "value": ".dds__btn-input:eq(0)"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div fieldset:nth-child(3) div:nth-child(5) fieldset div div input"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"1 yearCommitted amount of $12,092.84 per month\""
-    }, {
-        "type": "click",
-        "wait": {
-            "waitFor": "network"
-        },
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "button[type=\"button\"]:eq(7)"
-            }, {
-                "type": "css",
-                "value": "button:contains(\"Continue\"):eq(0)"
-            }, {
-                "type": "css",
-                "value": ".dds__font-weight-bold:eq(11)"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div div:nth-child(5) div:nth-child(2) button:nth-child(2)"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div.dds__px-0 div.dds__row div.dds__col-xxl-12 section.dds__dell-container div.dds__dell-container-body div.dds__d-flex div.dds__text-right button.dds__font-weight-bold:eq(1)"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"Continue\""
-    }, {
-        "type": "click",
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "select"
-            }, {
-                "type": "css",
-                "value": "div:contains(\"Choose your Billing Address\"):eq(12)"
-            }, {
-                "type": "css",
-                "value": ".dds__form-control"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div div div div div div select:nth-child(2)"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div.dds__px-0 div.dds__row div.dds__col-xxl-12 section.dds__dell-container div.dds__dell-container-body div.site-mfe-box_2E3Ct div.site-subscription-details_3lgkP div.dds__dell-container div.dds__dell-container-body div.dds__mb-2 select.dds__form-control"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"Select1 DELL WAY1 DELL WAY\""
-    }, {
-        "type": "selectOption",
-        "wait": {
-            "waitFor": "network"
-        },
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "select"
-            }, {
-                "type": "css",
-                "value": "div:contains(\"Choose your Billing Address\"):eq(12)"
-            }, {
-                "type": "css",
-                "value": ".dds__form-control"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div div div div div div select:nth-child(2)"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div.dds__px-0 div.dds__row div.dds__col-xxl-12 section.dds__dell-container div.dds__dell-container-body div.site-mfe-box_2E3Ct div.site-subscription-details_3lgkP div.dds__dell-container div.dds__dell-container-body div.dds__mb-2 select.dds__form-control"
-            }]
-        },
-        "description": "selectOption on \"Select1 DELL WAY1 DELL WAY\"",
-        "selections": [{
-            "index": 1,
-            "value": "530021221460,11,478171689321591"
-        }]
-    }, {
-        "type": "click",
-        "wait": {
-            "waitFor": "network"
-        },
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "select"
-            }, {
-                "type": "css",
-                "value": "div:contains(\"Choose your Billing Address\"):eq(12)"
-            }, {
-                "type": "css",
-                "value": ".dds__form-control"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div div div div div div select:nth-child(2)"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div.dds__px-0 div.dds__row div.dds__col-xxl-12 section.dds__dell-container div.dds__dell-container-body div.site-mfe-box_2E3Ct div.site-subscription-details_3lgkP div.dds__dell-container div.dds__dell-container-body div.dds__mb-2 select.dds__form-control"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"1 DELL WAY1 DELL WAY\""
-    }, {
-        "type": "click",
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "#site"
-            }, {
-                "type": "css",
-                "value": "select[name=\"site\"]"
-            }, {
-                "type": "css",
-                "value": "div:contains(\"3600 Victory Of America Way, Massachusetts\"):eq(17)"
-            }, {
-                "type": "css",
-                "value": ".form-select_3XMUX"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div div div div div div:nth-child(2) div div:nth-child(3) div div div:nth-child(2) select"
-            }, {
-                "type": "css",
-                "value": "#site"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"Select Site Address\""
-    }, {
-        "type": "selectOption",
-        "wait": {
-            "waitFor": "network"
-        },
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "#site"
-            }, {
-                "type": "css",
-                "value": "select[name=\"site\"]"
-            }, {
-                "type": "css",
-                "value": "div:contains(\"3600 Victory Of America Way, Massachusetts\"):eq(17)"
-            }, {
-                "type": "css",
-                "value": ".form-select_3XMUX"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div div div div div div:nth-child(2) div div:nth-child(3) div div div:nth-child(2) select"
-            }, {
-                "type": "css",
-                "value": "#site"
-            }]
-        },
-        "description": "selectOption on \"Select Site Address\"",
-        "selections": [{
-            "index": 1,
-            "value": "955066374181730012_530021221460_11"
-        }]
-    }, {
-        "type": "click",
-        "wait": {
-            "waitFor": "network"
-        },
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "button[type=\"button\"]:eq(8)"
-            }, {
-                "type": "css",
-                "value": "button:contains(\"Continue\"):eq(0)"
-            }, {
-                "type": "css",
-                "value": ".dds__font-weight-bold:eq(9)"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div div:nth-child(3) div:nth-child(2) button:nth-child(2)"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div.dds__px-0 div.dds__row div.dds__col-xxl-12 section.dds__dell-container div.dds__dell-container-body div.dds__d-flex div.dds__text-right button.dds__font-weight-bold:eq(1)"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"Continue\""
-    }, {
-        "type": "click",
-        "wait": {
-            "waitFor": "network"
-        },
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "button[type=\"button\"]:eq(9)"
-            }, {
-                "type": "css",
-                "value": "button:contains(\"Select\")"
-            }, {
-                "type": "css",
-                "value": ".dds__form-control"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div fieldset:nth-child(5) div div div fieldset div button"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div.dds__px-0 div.dds__row div.dds__col-xxl-12 section.dds__dell-container div.dds__dell-container-body fieldset.dds__border-0 div.dds__d-flex div.dds__form-group div.dds__form-group fieldset.dds__border-0 div.dds__select button.dds__form-control"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"Select\""
-    }, {
-        "type": "click",
-        "wait": {
-            "waitFor": "network"
-        },
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": ".dds__dropdown-item:eq(0)"
-            }, {
-                "type": "css",
-                "value": "#surveyResponses-selectDropdown li"
-            }, {
-                "type": "css",
-                "value": "#surveyResponses-selectDropdown li.dds__dropdown-item:eq(0)"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"vdsvcSD\""
-    }, {
-        "type": "click",
-        "wait": {
-            "waitFor": "network"
-        },
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "button[type=\"button\"]:eq(19)"
-            }, {
-                "type": "css",
-                "value": "button:contains(\"Continue\"):eq(0)"
-            }, {
-                "type": "css",
-                "value": ".dds__font-weight-bold:eq(15)"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div div:nth-child(8) div:nth-child(2) button:nth-child(2)"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div.dds__px-0 div.dds__row div.dds__col-xxl-12 section.dds__dell-container div.dds__dell-container-body div.dds__d-flex div.dds__text-right button.dds__font-weight-bold:eq(1)"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"Continue\""
-    }, {
-        "type": "click",
-        "wait": {
-            "waitFor": "network"
-        },
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "button[type=\"button\"]:eq(19)"
-            }, {
-                "type": "css",
-                "value": "button:contains(\"Continue\"):eq(0)"
-            }, {
-                "type": "css",
-                "value": ".dds__font-weight-bold:eq(15)"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div div:nth-child(8) div:nth-child(2) button:nth-child(2)"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div.dds__px-0 div.dds__row div.dds__col-xxl-12 section.dds__dell-container div.dds__dell-container-body div.dds__d-flex div.dds__text-right button.dds__font-weight-bold:eq(1)"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"Continue\""
+        "description": "Open \"Deployment Survey\" list"
     }, {
         "type": "click",
         "wait": {
@@ -811,199 +317,240 @@
         "target": {
             "locators": [{
                 "type": "css",
-                "value": "button:contains(\"Select Your Payment Method\")"
-            }, {
-                "type": "css",
-                "value": ".disable-horizontal-pads"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(3) section:nth-child(10) div div:nth-child(2) div div div div:nth-child(3) div button"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div section.dds__dell-container div.dds__dell-container-body div.dds__row div.dds__col-xxl-16 div.dds__d-flex div.left-wrapper-div_25f0w div.dds__mt-1 div button.disable-horizontal-pads"
+                "value": "li[tabindex=\"0\"]"
             }]
         },
         "button": 0,
-        "description": "click on \"Select Your Payment Method\""
+        "description": "Select \"Deployment Survey\""
     }, {
         "type": "click",
         "target": {
             "locators": [{
                 "type": "css",
-                "value": "span:contains(\"Invoice terms\")"
-            }, {
-                "type": "css",
-                "value": "html body:nth-child(8) div:nth-child(11) div div div:nth-child(3) div div div:nth-child(2) div:nth-child(2) label span:nth-child(2)"
-            }, {
-                "type": "css",
-                "value": "body.dds__body-off-canvas div.dialog_Ke_Q0 div.dds__modal-dialog div.dialog-width_31dsf div div.dds__ml-0 div div div.dds__form-check label.dds__form-check-label span:eq(1)"
+                "value": "[data-testid=\"next\"]"
             }]
         },
         "button": 0,
-        "description": "click on \"Invoice terms\""
+        "description": "Continue"
     }, {
         "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-cy=\"select-payment-method-text-link\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"next\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Continue to Review Order"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[id=\"poTypeRadio\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-cy=\"select-payment-method-text-link\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Select \"Payment Method\""
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "next_event"
+        },
         "target": {
             "locators": [{
                 "type": "css",
                 "value": "#poTypeRadio"
-            }, {
-                "type": "css",
-                "value": "input[type=\"radio\"][name=\"paymentTypeSelection\"]:eq(1)"
-            }, {
-                "type": "css",
-                "value": ".dds__form-check-input:eq(2)"
-            }, {
-                "type": "css",
-                "value": "html body:nth-child(8) div:nth-child(11) div div div:nth-child(3) div div div:nth-child(2) div:nth-child(2) label input"
-            }, {
-                "type": "css",
-                "value": "#poTypeRadio"
             }]
         },
         "button": 0,
-        "description": "click on \"Invoice terms\""
+        "description": "Click \"Invoice terms\""
     }, {
         "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-testid=\"new-po-number\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
         "target": {
             "locators": [{
-                "type": "css",
-                "value": "button:eq(73)"
-            }, {
                 "type": "css",
                 "value": "button:contains(\"Add PO Number\")"
-            }, {
-                "type": "css",
-                "value": ".dds__btn:eq(50)"
-            }, {
-                "type": "css",
-                "value": "html body:nth-child(8) div:nth-child(11) div div div:nth-child(3) div div:nth-child(2) div:nth-child(2) div div div:nth-child(3) button"
-            }, {
-                "type": "css",
-                "value": "body.dds__body-off-canvas div.dialog_Ke_Q0 div.dds__modal-dialog div.dialog-width_31dsf div div.dds__ml-0 div.payment-method_3Ejqr div div.dds__mt-4 div.dds__d-flex div.dds__form-group button.dds__btn:eq(1)"
             }]
         },
         "button": 0,
-        "description": "click on \"Add PO Number\""
-    }, {
-        "type": "click",
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "input[type=\"text\"][name=\"id\"]"
-            }, {
-                "type": "css",
-                "value": ".dds__form-control:eq(9)"
-            }, {
-                "type": "css",
-                "value": "#selectPOForm div input:nth-child(2)"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"id\""
+        "description": "Click \"Add PO Number\""
     }, {
         "type": "keystrokes",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-cy=\"save-payment-btn\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
         "target": {
             "locators": [{
                 "type": "css",
-                "value": "input[type=\"text\"][name=\"id\"]"
-            }, {
-                "type": "css",
-                "value": ".dds__form-control:eq(9)"
-            }, {
-                "type": "css",
-                "value": "#selectPOForm div input:nth-child(2)"
+                "value": "[data-testid=\"new-po-number\"]"
             }]
         },
         "masked": false,
         "simulateBlurEvent": true,
-        "description": "keystrokes on \"id\"",
+        "description": "Type PO \"id\"",
         "textValue": "1234567"
     }, {
         "type": "click",
         "wait": {
-            "waitFor": "network"
+            "waitFor": "next_event"
         },
         "target": {
             "locators": [{
                 "type": "css",
-                "value": "button[type=\"submit\"]"
-            }, {
-                "type": "css",
-                "value": "button:contains(\"Save payment details\")"
-            }, {
-                "type": "css",
-                "value": ".dds__btn:eq(52)"
-            }, {
-                "type": "css",
-                "value": "html body:nth-child(8) div:nth-child(11) div div div:nth-child(3) div:nth-child(3) div button:nth-child(2)"
-            }, {
-                "type": "css",
-                "value": "body.dds__body-off-canvas div.dialog_Ke_Q0 div.dds__modal-dialog div.dialog-width_31dsf div div.dds__modal-footer div.dialog-actions_306w1 button.dds__btn:eq(1)"
+                "value": "[data-cy=\"save-payment-btn\"]"
             }]
         },
         "button": 0,
-        "description": "click on \"Save payment details\""
-    }, {
-        "type": "click",
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(3) div:nth-child(11) div div section div div div div label span:nth-child(2)"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div div.dds__px-0 div.dds__row div.dds__col-xxl-16 section.dds__dell-container div.dds__dell-container-body div.dds__mt-5 div.dds__col-auto div.dds__form-check label.dds__form-check-label span"
-            }]
-        },
-        "button": 0,
-        "description": "click"
-    }, {
-        "type": "click",
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "#consentCheckbox"
-            }, {
-                "type": "css",
-                "value": "input[type=\"checkbox\"]"
-            }, {
-                "type": "css",
-                "value": ".dds__form-check-input"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(3) div:nth-child(11) div div section div div div div label input"
-            }, {
-                "type": "css",
-                "value": "#consentCheckbox"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"By checking the box, you, on behalf of your company, agree that the Service Offering Description and your signed negotiated agreement for this Order apply to this purchase. If your company does not have a signed, negotiated agreement for this specific Order, the Service Offering Descri...\""
+        "description": "Save payment details"
     }, {
         "type": "click",
         "wait": {
-            "waitFor": "network"
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-testid=\"saveAndExit\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
         },
         "target": {
             "locators": [{
                 "type": "css",
-                "value": "button[type=\"button\"]:eq(12)"
-            }, {
-                "type": "css",
-                "value": "button:contains(\"Back\")"
-            }, {
-                "type": "css",
-                "value": ".dds__font-weight-bold:eq(41)"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(3) div:nth-child(11) div div section div div:nth-child(3) div:nth-child(2) button"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div div.dds__px-0 div.dds__row div.dds__col-xxl-16 section.dds__dell-container div.dds__dell-container-body div.dds__d-flex div.dds__text-right button.dds__font-weight-bold:eq(0)"
+                "value": "[data-testid=\"back\"]"
             }]
         },
         "button": 0,
-        "description": "click on \"Back\""
+        "description": "Back"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-testid=\"save-exit-modal-yes\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"saveAndExit\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Save draft"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-testid=\"draft-orders-search\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"save-exit-modal-yes\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Save"
+    }, {
+        "type": "keystrokes",
+        "wait": {
+            "waitFor": "next_event"
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"draft-orders-search\"]"
+            }]
+        },
+        "masked": false,
+        "simulateBlurEvent": true,
+        "simulateReturnKey": true,
+        "description": "Draft Order \"Search\"",
+        "textValue": "Dynatrace"
     }, {
         "type": "click",
         "wait": {
@@ -1012,68 +559,27 @@
         "target": {
             "locators": [{
                 "type": "css",
-                "value": "button[type=\"button\"]:eq(17)"
-            }, {
-                "type": "css",
-                "value": "button:contains(\"Save draft\")"
-            }, {
-                "type": "css",
-                "value": ".dds__font-weight-bold:eq(13)"
-            }, {
-                "type": "css",
-                "value": "#app main:nth-child(5) div:nth-child(2) div div div:nth-child(5) div div section div div:nth-child(8) div button:nth-child(2)"
-            }, {
-                "type": "css",
-                "value": "#app main div.dds__container-fluid div.dds__py-5 div.dds__container div.dds__px-0 div.dds__row div.dds__col-xxl-12 section.dds__dell-container div.dds__dell-container-body div.dds__d-flex div.dds__text-left button.dds__font-weight-bold:eq(1)"
+                "value": "[data-testid=\"draft-order-actions\"]"
             }]
         },
         "button": 0,
-        "description": "click on \"Save draft\""
+        "description": "Draft Order Options (...)"
     }, {
         "type": "click",
         "wait": {
-            "waitFor": "next_event"
-        },
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": "button[type=\"button\"]:eq(28)"
-            }, {
-                "type": "css",
-                "value": "button:contains(\"Save\"):eq(1)"
-            }, {
-                "type": "css",
-                "value": ".dds__btn:eq(43)"
-            }, {
-                "type": "css",
-                "value": "#dds-modal-save-and-exit div div div:nth-child(5) button:nth-child(2)"
-            }, {
-                "type": "css",
-                "value": "#dds-modal-save-and-exit div.dds__modal-dialog div.dds__modal-content div.dds__modal-footer button.dds__btn:eq(1)"
-            }]
-        },
-        "button": 0,
-        "description": "click on \"Save\""
-    }, {
-        "type": "click",
-        "target": {
-            "locators": [{
-                "type": "css",
-                "value": ".popover-link_lpy3Y:eq(0)"
-            }, {
-                "type": "css",
-                "value": "div[name=\"right\"] div div div div svg"
-            }, {
-                "type": "css",
-                "value": "#draft-orders-grid div div.ag-root-wrapper div.ag-root-wrapper-body div.ag-root div.ag-body-viewport div.ag-pinned-right-cols-container div.ag-row-even div.ag-cell div.ag-react-container div svg.popover-link_lpy3Y:eq(0)"
-            }]
-        },
-        "button": 0,
-        "description": "click"
-    }, {
-        "type": "click",
-        "wait": {
-            "waitFor": "network"
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-testid=\"modal-primary-button\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
         },
         "target": {
             "locators": [{
@@ -1085,7 +591,7 @@
             }]
         },
         "button": 0,
-        "description": "click on \"Delete Draft Order\""
+        "description": "Delete Draft Order"
     }, {
         "type": "click",
         "wait": {
@@ -1094,48 +600,36 @@
         "target": {
             "locators": [{
                 "type": "css",
-                "value": "button[type=\"button\"]:eq(6)"
-            }, {
-                "type": "css",
-                "value": "button:contains(\"Delete\"):eq(10)"
-            }, {
-                "type": "css",
-                "value": ".dds__btn:eq(28)"
-            }, {
-                "type": "css",
-                "value": "#dds-modal-delete-draft-order div div div:nth-child(5) button:nth-child(2)"
-            }, {
-                "type": "css",
-                "value": "#dds-modal-delete-draft-order div.dds__modal-dialog div.dds__modal-content div.dds__modal-footer button.dds__btn:eq(1)"
+                "value": "[data-testid=\"modal-primary-button\"]"
             }]
         },
         "button": 0,
-        "description": "click on \"Delete\""
+        "description": "Confirm \"Delete\""
     }, {
         "type": "click",
         "wait": {
-            "waitFor": "network"
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "button:contains(\"Sign Out\")"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
         },
         "target": {
             "locators": [{
                 "type": "css",
-                "value": "button:eq(21)"
-            }, {
-                "type": "css",
-                "value": "button:contains(\"cool tofino\")"
-            }, {
-                "type": "css",
-                "value": ".dds__msthd-icon-ctnr:eq(4)"
-            }, {
-                "type": "css",
-                "value": "#app nav:nth-child(3) div:nth-child(6) button"
-            }, {
-                "type": "css",
-                "value": "#app nav.dds__msthd div.dds__msthd-top-ctnr button.dds__msthd-icon-ctnr:eq(3)"
+                "value": "[data-target=\"profile-ctnr\"]"
             }]
         },
         "button": 0,
-        "description": "click on \"cool tofino\""
+        "description": "Click User Profile"
     }, {
         "type": "click",
         "wait": {
@@ -1144,25 +638,10 @@
         "target": {
             "locators": [{
                 "type": "css",
-                "value": "button:eq(23)"
-            }, {
-                "type": "css",
-                "value": "a:contains(\"Sign Out\")"
-            }, {
-                "type": "css",
                 "value": "button:contains(\"Sign Out\")"
-            }, {
-                "type": "css",
-                "value": ".dds__btn:eq(22)"
-            }, {
-                "type": "css",
-                "value": "#profile-ctnr div:nth-child(2) div div:nth-child(2) div:nth-child(3) a button"
-            }, {
-                "type": "css",
-                "value": "#profile-ctnr div.dds__msthd-ctnr-content-wrapper div.dds__msthd-ctnr-content div.dds__msthd-ctnr-profile div.dds__msthd-ctnr-profile-btn a button.dds__btn:eq(0)"
             }]
         },
         "button": 0,
-        "description": "click on \"Sign Out\""
+        "description": "Sign Out"
     }]
 }
