@@ -1,0 +1,737 @@
+{
+  "frequencyMin": 120,
+  "anomalyDetection": {
+    "outageHandling": {
+      "globalOutage": true,
+      "localOutage": true,
+      "localOutagePolicy": {
+        "affectedLocations": 1,
+        "consecutiveRuns": 3
+      }
+    },
+    "loadingTimeThresholds": {
+      "enabled": true,
+      "thresholds": [
+        {
+          "type": "TOTAL",
+          "valueMs": 100,
+          "requestIndex": 1
+        }
+      ]
+    }
+  },
+  "type": "BROWSER",
+  "name": "Browser Monitor Example",
+  "locations": [
+    "GEOLOCATION-9999453BE4BDB3CD"
+  ],
+  "enabled": true,
+  "script": {
+    "configuration": {
+        "chromiumStartupFlags": {
+            "disable-web-security": false
+        },
+        "requestHeaders": {
+            "addHeaders": [{
+                "name": "X-PF-Location",
+                "value": "External"
+            }, {
+                "name": "x-DAIS-AutomationId",
+                "value": "3D2F6-32D6-4310-918C-3C475EE3032D"
+            }, {
+                "name": "dtc-dell-trace-id",
+                "value": "Dynatrace-synthetic-APEX Login 2"
+            }]
+        },
+        "device": {
+            "orientation": "landscape",
+            "deviceName": "Desktop"
+        }
+    },
+    "type": "clickpath",
+    "version": "1.0",
+    "events": [{
+        "type": "navigate",
+        "wait": {
+            "waitFor": "page_complete"
+        },
+        "description": "Loading of \"https://console.delltechnologies.com/\"",
+        "url": "https://console.delltechnologies.com/"
+    }, {
+        "type": "javascript",
+        "wait": {
+            "waitFor": "next_event"
+        },
+        "description": "Login",
+        "javaScript": "email = \"dynaprod.csp.admin@proton.me\";\r\npassword = \"Password@1\";\r\n\r\nconst akamaiAlertElement = document.querySelector(\"body > h1\");\r\nconst isAkamaiBlocking = akamaiAlertElement && akamaiAlertElement.innerText.includes(\"Access Denied\");\r\nif (isAkamaiBlocking) {\r\n    // check if Akamai is blocking\r\n    api.info(\"Akamai is blocking  - skipping current execution without failing\");\r\n    api.skipNextSyntheticEvents(50);\r\n} else if (document.querySelector(\"#ImageText\")) {\r\n    // check if captcha is triggered\r\n    api.info(\"Captcha has been triggered - skipping current execution without failing\");\r\n    api.skipNextSyntheticEvents(50);\r\n} else {\r\n    // otherwise log in\r\n    document.querySelector(\"#EmailAddress\").value = email;\r\n    document.querySelector(\"#Password\").value = password;\r\n    document.querySelector(\"#sign-in-button\").click();\r\n    api.finish();\r\n}"
+    }, {
+        "type": "javascript",
+        "wait": {
+            "waitFor": "next_event"
+        },
+        "description": "Select Organization (Geo)",
+        "javaScript": "const GEO = \"APEXTESTCSPUS1\";\r\n\r\ndocument.querySelector(\"button[data-testid=organization-dropdown-trigger]\").click();\r\ndocument.querySelector(`div[data-testid=${GEO}]`).click();"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-testid=\"no-customer-selection\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"catalog\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Catalog"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-cy=\"configure-hybrid15g\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"no-customer-selection\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Select Customer"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-cy=\"configure-hybrid15g\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"catalog\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Catalog"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[id=\"order-name\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-cy=\"configure-hybrid15g\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Configure"
+    }, {
+        "type": "keystrokes",
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[id=\"order-name\"]"
+            }]
+        },
+        "masked": false,
+        "simulateBlurEvent": true,
+        "description": "Type \"Order name\"",
+        "textValue": "Dynatrace-AHC-CSP-Test"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-testid=\"management-domain-question\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"next\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Continue"
+    }, {
+        "type": "click",
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "#dedicatedDomainNo-no"
+            }]
+        },
+        "button": 0,
+        "description": "Management Zone"
+    }, {
+        "type": "click",
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[id=\"vmwareEditionStandard-vcf standard\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Cloud Foundation"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-testid=\"service-type-COMPUTE_OPTIMIZED\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"next\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Continue"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "network"
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"service-type-COMPUTE_OPTIMIZED\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Click \"Computer Optimized\""
+    }, {
+        "type": "click",
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "#storageType-vsan"
+            }]
+        },
+        "button": 0,
+        "description": "Click Storage Type \"vSAN\""
+    }, {
+        "type": "click",
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "#storageCapacity-16"
+            }]
+        },
+        "button": 0,
+        "description": "Click Storage Capacity \"16TB\""
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-testid=\"vmware-ela-title\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"next\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Continue to VMWare ELA "
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-testid=\"select-site-dropdown\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"next\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Continue to Site Address"
+    }, {
+        "type": "selectOption",
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"select-site-dropdown\"]"
+            }]
+        },
+        "description": "Select \"Site Address\"",
+        "selections": [{
+            "index": 1,
+            "value": "974966516533133036_530026267382_11"
+        }]
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-testid=\"site-survey-responses-select\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"next\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Continue to Site Survey"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "next_event"
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"site-survey-responses-select\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Open \"Deployment Survey\" list"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "next_event"
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "li[tabindex=\"0\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Select \"Deployment Survey\""
+    }, {
+        "type": "click",
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"next\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Continue"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-cy=\"select-payment-method-text-link\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"next\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Continue to Review Order"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[id=\"poTypeRadio\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-cy=\"select-payment-method-text-link\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Select \"Payment Method\""
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "next_event"
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "#poTypeRadio"
+            }]
+        },
+        "button": 0,
+        "description": "Click \"Invoice terms\""
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-testid=\"new-po-number\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "button:contains(\"Add PO Number\")"
+            }]
+        },
+        "button": 0,
+        "description": "Click \"Add PO Number\""
+    }, {
+        "type": "keystrokes",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-cy=\"save-payment-btn\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"new-po-number\"]"
+            }]
+        },
+        "masked": false,
+        "simulateBlurEvent": true,
+        "description": "Type PO \"id\"",
+        "textValue": "1234567"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "next_event"
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-cy=\"save-payment-btn\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Save payment details"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-testid=\"saveAndExit\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"back\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Back"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-testid=\"save-exit-modal-yes\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"saveAndExit\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Save draft"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-testid=\"draft-orders-search\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"save-exit-modal-yes\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Save"
+    }, {
+        "type": "keystrokes",
+        "wait": {
+            "waitFor": "next_event"
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"draft-orders-search\"]"
+            }]
+        },
+        "masked": false,
+        "simulateBlurEvent": true,
+        "simulateReturnKey": true,
+        "description": "Draft Order \"Search\"",
+        "textValue": "Dynatrace"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "next_event"
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"draft-order-actions\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Draft Order Options (...)"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "[data-testid=\"modal-primary-button\"]"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "#popover-contained div:nth-child(2) div ul li:nth-child(2)"
+            }, {
+                "type": "css",
+                "value": "#popover-contained div.popover-body div.list_cLU66 ul li:eq(1)"
+            }]
+        },
+        "button": 0,
+        "description": "Delete Draft Order"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "network"
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-testid=\"modal-primary-button\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Confirm \"Delete\""
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "validation",
+            "validation": {
+                "target": {
+                    "locators": [{
+                        "type": "css",
+                        "value": "button:contains(\"Sign Out\")"
+                    }]
+                },
+                "type": "element_match",
+                "failIfFound": false,
+                "match": ""
+            },
+            "timeoutInMilliseconds": 60000
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "[data-target=\"profile-ctnr\"]"
+            }]
+        },
+        "button": 0,
+        "description": "Click User Profile"
+    }, {
+        "type": "click",
+        "wait": {
+            "waitFor": "page_complete"
+        },
+        "target": {
+            "locators": [{
+                "type": "css",
+                "value": "button:contains(\"Sign Out\")"
+            }]
+        },
+        "button": 0,
+        "description": "Sign Out"
+    }]
+},
+  "keyPerformanceMetrics": {
+    "loadActionKpm": "VISUALLY_COMPLETE",
+    "xhrActionKpm": "VISUALLY_COMPLETE"
+  },
+  "tags": [
+    "example"
+  ],
+  "manuallyAssignedApps": [
+    "APPLICATION-4ADF0EF407C7C545"
+  ],
+  "events": []
+}
