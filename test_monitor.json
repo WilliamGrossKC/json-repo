@@ -1,0 +1,113 @@
+{
+  "frequencyMin": 120,
+  "anomalyDetection": {
+        "outageHandling": {
+            "globalOutage": true,
+            "globalOutagePolicy": {
+                "consecutiveRuns": 3
+            },
+            "localOutage": true,
+            "localOutagePolicy": {
+                "affectedLocations": 1,
+                "consecutiveRuns": 3
+            },
+            "retryOnError": true
+        },
+        "loadingTimeThresholds": {
+            "enabled": true,
+            "thresholds": []
+        }
+    },
+  "type": "BROWSER",
+  "name": "TESTMONITOR_APC",
+  "locations": [
+        "GEOLOCATION-490B6966420E218F",
+        "GEOLOCATION-9999453BE4BDB3CD"
+    ],
+  "enabled": true,
+  "script": {
+        "type": "clickpath",
+        "version": "1.0",
+        "configuration": {
+            "device": {
+                "deviceName": "Desktop",
+                "orientation": "landscape"
+            },
+            "requestHeaders": {
+                "addHeaders": [
+                    {
+                        "name": "X-PF-Location",
+                        "value": "External"
+                    },
+                    {
+                        "name": "x-DAIS-AutomationId",
+                        "value": "3D2F6-32D6-4310-918C-3C475EE3032D"
+                    },
+                    {
+                        "name": "dtc-dell-trace-id",
+                        "value": "Dynatrace-synthetic-APEX Login 2"
+                    }
+                ]
+            },
+            "chromiumStartupFlags": {
+                "disable-web-security": false
+            }
+        },
+        "events": [
+            {
+                "type": "navigate",
+                "description": "Loading of \"https://console.delltechnologies.com/\"",
+                "url": "https://console.delltechnologies.com/",
+                "wait": {
+                    "waitFor": "page_complete"
+                }
+            },
+            {
+                "type": "javascript",
+                "description": "Login",
+                "javaScript": "email = \"dynaprod.end.admin@proton.me\";\r\npassword = \"Password@1\";\r\n\r\nconst akamaiAlertElement = document.querySelector(\"body > h1\");\r\nconst isAkamaiBlocking = akamaiAlertElement && akamaiAlertElement.innerText.includes(\"Access Denied\");\r\nif (isAkamaiBlocking) {\r\n    // check if Akamai is blocking\r\n    api.info(\"Akamai is blocking  - skipping current execution without failing\");\r\n    api.skipNextSyntheticEvents(50);\r\n} else if (document.querySelector(\"#ImageText\")) {\r\n    // check if captcha is triggered\r\n    api.info(\"Captcha has been triggered - skipping current execution without failing\");\r\n    api.skipNextSyntheticEvents(50);\r\n} else {\r\n    // otherwise log in\r\n    document.querySelector(\"#EmailAddress\").value = email;\r\n    document.querySelector(\"#Password\").value = password;\r\n    document.querySelector(\"#sign-in-button\").click();\r\n    api.finish();\r\n}",
+                "wait": {
+                    "waitFor": "next_event"
+                }
+            }
+        ]
+    },
+  "tags": [
+        {
+            "source": "USER",
+            "context": "CONTEXTLESS",
+            "key": "APEX_ENVIRONMENT",
+            "value": "production"
+        },
+        {
+            "source": "USER",
+            "context": "CONTEXTLESS",
+            "key": "CMDB_ID",
+            "value": "1002068"
+        },
+        {
+            "source": "USER",
+            "context": "CONTEXTLESS",
+            "key": "Team",
+            "value": "apexoe-acklins"
+        },
+        {
+            "source": "USER",
+            "context": "CONTEXTLESS",
+            "key": "Team",
+            "value": "APEXOE"
+        },
+        {
+            "source": "USER",
+            "context": "CONTEXTLESS",
+            "key": "[Kubernetes]app",
+            "value": "oe-order-configurator"
+        },
+        {
+            "source": "USER",
+            "context": "CONTEXTLESS",
+            "key": "pagerDutyAlert",
+            "value": "YES"
+        }
+    ],
+}
